@@ -24,6 +24,7 @@ class GoogleSpreadsheetManager
         $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
         $client->setAuthConfig('credentials.json');
         $client->setAccessType('offline');
+        $client->setApprovalPrompt('force');
     
         // Load previously authorized credentials from a file.
         $credentialsPath = 'token.json';
@@ -53,11 +54,12 @@ class GoogleSpreadsheetManager
         }
         $client->setAccessToken($accessToken);
     
-        // Refresh the token if it's expired.
-        if ($client->isAccessTokenExpired()) {
+         // Refresh the token if it's expired.
+         if ($client->isAccessTokenExpired()) {
             $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
             file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
         }
+
         return $client;
     }
 }
